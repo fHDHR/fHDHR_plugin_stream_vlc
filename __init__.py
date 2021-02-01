@@ -40,11 +40,13 @@ def setup(plugin):
         vlc_command = [vlc_path, "--version", "pipe:stdout"]
         try:
             vlc_proc = subprocess.Popen(vlc_command, stdout=subprocess.PIPE)
-            vlc_version = vlc_proc.stdout.read().decode().split("version ")[1].split('\n')[0]
+            vlc_version = vlc_proc.stdout.read().decode().split('\n')[0].split("version ")[1]
         except FileNotFoundError:
             vlc_version = None
         except PermissionError:
             vlc_version = None
+        except IndexError:
+            vlc_version = "Undetermined"
         finally:
             vlc_proc.terminate()
             vlc_proc.communicate()
