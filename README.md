@@ -25,3 +25,8 @@ Join us in `#fHDHR <irc://irc.freenode.net/#fHDHR>`_ on Freenode.
 [vlc]
 # path =
 ````
+
+
+# Developer Note
+
+This was made as a plugin, instead of being included in core, due to its dependency on vlc.
