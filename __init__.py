@@ -5,7 +5,7 @@ import subprocess
 from fHDHR.exceptions import TunerError
 
 
-def setup(plugin):
+def setup(plugin, versions):
 
     # Check config for vlc path
     vlc_path = None
@@ -18,9 +18,9 @@ def setup(plugin):
 
     if not vlc_path:
         plugin.logger.info("Attempting to find vlc in PATH.")
-        if plugin.config.internal["versions"]["Operating System"]["version"] in ["Linux", "Darwin"]:
+        if versions.dict["Operating System"]["version"] in ["Linux", "Darwin"]:
             find_vlc_command = ["which", "vlc"]
-        elif plugin.config.internal["versions"]["Operating System"]["version"] in ["Windows"]:
+        elif versions.dict["Operating System"]["version"] in ["Windows"]:
             find_vlc_command = ["where", "vlc"]
 
         vlc_proc = subprocess.Popen(find_vlc_command, stdout=subprocess.PIPE)
@@ -56,7 +56,7 @@ def setup(plugin):
         vlc_version = "Missing"
         plugin.logger.warning("Failed to find vlc.")
 
-    plugin.config.register_version("vlc", vlc_version, "env")
+    versions.register_version("vlc", vlc_version, "env")
 
 
 class Plugin_OBJ():
@@ -67,7 +67,7 @@ class Plugin_OBJ():
         self.stream_args = stream_args
         self.tuner = tuner
 
-        if self.plugin_utils.config.internal["versions"]["vlc"]["version"] == "Missing":
+        if self.plugin_utils.versions.dict["vlc"]["version"] == "Missing":
             raise TunerError("806 - Tune Failed: VLC Missing")
 
         self.bytes_per_read = int(self.plugin_utils.config.dict["streaming"]["bytes_per_read"])
