@@ -1,5 +1,4 @@
 import os
-import sys
 import subprocess
 
 from fHDHR.exceptions import TunerError
@@ -85,25 +84,12 @@ class Plugin_OBJ():
                     chunk = vlc_proc.stdout.read(self.bytes_per_read)
                     if not chunk:
                         break
-                        # raise TunerError("807 - No Video Data")
                     yield chunk
-                    chunk_size = int(sys.getsizeof(chunk))
-                    self.tuner.add_downloaded_size(chunk_size)
-                self.plugin_utils.logger.info("Connection Closed: Tuner Lock Removed")
 
-            except GeneratorExit:
-                self.plugin_utils.logger.info("Connection Closed.")
-            except Exception as e:
-                self.plugin_utils.logger.info("Connection Closed: %s" % e)
             finally:
                 vlc_proc.terminate()
                 vlc_proc.communicate()
                 vlc_proc.kill()
-                self.plugin_utils.logger.info("Connection Closed: Tuner Lock Removed")
-                if hasattr(self.fhdhr.origins.origins_dict[self.tuner.origin], "close_stream"):
-                    self.fhdhr.origins.origins_dict[self.tuner.origin].close_stream(self.tuner.number, self.stream_args)
-                self.tuner.close()
-                # raise TunerError("806 - Tune Failed")
 
         return generate()
 
