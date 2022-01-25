@@ -69,7 +69,6 @@ class Plugin_OBJ():
         if self.plugin_utils.versions.dict["vlc"]["version"] == "Missing":
             raise TunerError("806 - Tune Failed: VLC Missing")
 
-        self.bytes_per_read = int(self.plugin_utils.config.dict["streaming"]["bytes_per_read"])
         self.vlc_command = self.vlc_command_assemble(stream_args)
 
     def get(self):
@@ -81,7 +80,7 @@ class Plugin_OBJ():
 
                 while self.tuner.tuner_lock.locked():
 
-                    chunk = vlc_proc.stdout.read(self.bytes_per_read)
+                    chunk = vlc_proc.stdout.read(self.stream_args["bytes_per_read"])
                     if not chunk:
                         break
                     yield chunk
