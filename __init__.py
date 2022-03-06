@@ -131,7 +131,7 @@ class Plugin_OBJ():
                         "critical": "1",
                         }
         vlc_command.extend(["--log-verbose=", loglevel_dict[log_level]])
-        if log_level not in ["info", "debug"]:
+        if log_level not in ["debug"]:
             vlc_command.extend(["--quiet"])
         return vlc_command
 
